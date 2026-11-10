@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Profesor - {{ profesor.nombre }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+    <a href="{% url 'web_lista_cursos' %}" class="btn btn-outline-secondary mb-3">« Volver al catálogo</a>
+
+    <div class="card p-4 mb-4">
+        <h2>{{ profesor.nombre }}</h2>
+        <p><strong>Correo:</strong> {{ profesor.email }}</p>
+        <hr>
+
+        <h4 class="text-primary">Cursos que dicta</h4>
+        {% if cursos %}
+            <ul class="list-group">
+                {% for curso in cursos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'web_detalle_curso' curso.pk %}">{{ curso.nombre }}</a>
+                    <span class="badge bg-secondary rounded-pill">{{ curso.codigo }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Este profesor aún no tiene cursos asignados.</p>
+        {% endif %}
+    </div> 
+</body>
+</html>

@@ -1,0 +1,58 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Profesores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+    <a href="{% url 'web_lista_cursos' %}" class="btn btn-outline-secondary mb-3">« Volver al catálogo</a>
+
+    <h1 class="mb-3">Profesores</h1>
+    <p class="text-muted">Total de profesores: {{ paginator.count }}</p>
+
+    <div class="row">
+        {% for profesor in profesores %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ profesor.nombre }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ profesor.especialidad }}</h6>
+                    <p class="card-text">
+                        <strong>Cursos que dicta:</strong> {{ profesor.cursos.count }}
+                    </p>
+                    <a href="{% url 'web_detalle_profesor' profesor.pk %}" class="btn btn-primary btn-sm">Ver Detalle</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">No hay profesores registrados en el sistema.</div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</body>
+</html>

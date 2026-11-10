@@ -1,0 +1,15 @@
+# Entorno Virtual
+venv/
+env/
+ENV/
+
+# Base de datos local (para no sobreescribir datos)
+*.sqlite3
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Archivos de configuración del sistema / IDE
+.vscode/
+.DS_Store

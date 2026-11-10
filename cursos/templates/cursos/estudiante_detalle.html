@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estudiante - {{ estudiante.nombre }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body class="container mt-4">
+    <a href="{% url 'web_lista_estudiantes' %}" class="btn btn-outline-secondary mb-3">« Volver a estudiantes</a>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card p-4 mb-4">
+        <h2>{{ estudiante.nombre }}</h2>
+        <p><strong>Matrícula:</strong> {{ estudiante.matricula }}</p>
+        <p><strong>Correo:</strong> {{ estudiante.email }}</p>
+        <hr>
+
+        <h4 class="text-primary">Cursos inscritos</h4>
+        {% if cursos_inscritos %}
+            <ul class="list-group">
+                {% for curso in cursos_inscritos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'web_detalle_curso' curso.pk %}">{{ curso.nombre }}</a>
+                    <span class="badge bg-secondary rounded-pill">{{ curso.codigo }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Este estudiante aún no está inscrito en ningún curso.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <hr>
+            <h5>Inscribir en un curso</h5>
+            {% if cursos_disponibles %}
+                <form method="post" action="{% url 'web_inscribir_estudiante' estudiante.pk %}" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <select name="curso" class="form-select" required>
+                        {% for curso in cursos_disponibles %}
+                            <option value="{{ curso.pk }}">{{ curso.codigo }} - {{ curso.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-success">Inscribir</button>
+                </form>
+            {% else %}
+                <p class="text-muted">Ya está inscrito en todos los cursos.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
